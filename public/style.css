@@ -7,7 +7,7 @@ body {
 
 header {
     background: #1f6feb;
-    padding: 2rem;
+    padding: 1.5rem;
     text-align: center;
     border-bottom: 5px solid #0b4b8d;
 }
@@ -29,7 +29,7 @@ nav button {
     background: #238636;
     border: none;
     color: #fff;
-    padding: 1rem 2rem;
+    padding: 0.75rem 2rem;
     font-size: 1rem;
     border-radius: 6px;
     cursor: pointer;
@@ -41,8 +41,7 @@ nav button:hover {
 }
 
 main {
-    padding: 3rem;
-    background: #161b22;
+    padding: 2rem;
 }
 
 .tab {
@@ -56,26 +55,24 @@ main {
 form {
     display: flex;
     flex-direction: column;
-    max-width: 700px;
+    max-width: 500px;
     margin: auto;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
-form input, form textarea {
-    padding: 0.75rem;
+form input {
+    padding: 0.5rem;
     font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #444;
-    background: #222;
-    color: #fff;
+    border-radius: 4px;
+    border: none;
 }
 
 form button {
     background: #1f6feb;
     color: #fff;
-    padding: 1rem;
     border: none;
-    border-radius: 6px;
+    padding: 0.75rem;
+    border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease;
 }
@@ -84,9 +81,9 @@ form button:hover {
     background: #388bfd;
 }
 
-/* Bestätigungsnachricht */
+/* Response Message */
 h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #238636;
 }
 

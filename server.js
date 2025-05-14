@@ -1,49 +1,52 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const bodyParser = require("body-parser");
 const app = express();
+const port = 3003;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
-const PORT = 3004;
+app.post("/bewerbung", (req, res) => {
+    const { name, email, discord, fluest, alter, interesse, staerken, warum } = req.body;
 
-app.post('/bewerbung', (req, res) => {
-  const { discord, minecraft, alter, interessen, staerken, warum } = req.body;
-
-  // ✅ Bewerbung-ID erstellen
-  const bewerbungsID = Date.now();
-
-  // ✅ Desktop-Pfad herausfinden
-  const desktopPath = path.join(os.homedir(), 'Desktop');
-
-  // ✅ Datei-Inhalt zusammenbauen
-  const content = `Bewerbung ID: ${bewerbungsID}
-Minecraft-Name: ${minecraft}
-Discord-Name: ${discord}
-Alter: ${alter}
-Interessen: ${interessen}
-Stärken: ${staerken}
-Warum wir dich nehmen sollten: ${warum}
-`;
-
-  // ✅ Datei speichern auf dem Desktop
-  const filePath = path.join(desktopPath, `Bewerbung_${bewerbungsID}.txt`);
-  fs.writeFile(filePath, content, (err) => {
-    if (err) {
-      console.error('Fehler beim Schreiben der Datei:', err);
-      return res.status(500).send('Ein Fehler ist aufgetreten.');
-    }
-    res.send(`
-      <h2>Danke für deine Bewerbung!</h2>
-      <p>Deine Bewerbung wurde gespeichert.</p>
-      <p>Check deinen Desktop für die Datei: <strong>Bewerbung_${bewerbungsID}.txt</strong></p>
+    if (parseInt(alter) < 14) {
+        return res.send(`
+      <h1 style="text-align:center;color:red;">Bewerbung abgelehnt!</h1>
+      <p style="text-align:center;">Leider müssen Bewerber mindestens 14 Jahre alt sein.</p>
+      <a href="/" style="display:block;text-align:center;margin-top: 20px;">Zurück zur Bewerbung</a>
     `);
-  });
+    }
+
+    const id = Math.random().toString(36).substr(2, 8).toUpperCase();
+    const content = `Bewerbungs-ID: ${id}
+Name: ${name}
+E-Mail: ${email}
+Discord: ${discord}
+Wer hat dir von server erzählt: ${fluest}
+Alter: ${alter}
+
+Interessen: ${interesse}
+Stärken: ${staerken}
+Warum sollten wir dich nehmen?: ${warum}
+
+**Wichtiger Hinweis**: Bitte trete unserem [Discord-Server](https://discord.gg/Slimecraft) bei, um deine Bewerbung abzuschließen.`;
+
+    const savePath = path.join(__dirname, "bewerbungen");
+    if (!fs.existsSync(savePath)) fs.mkdirSync(savePath);
+
+    const filename = `${id}_${name.replace(/[^a-z0-9]/gi, "_")}.txt`;
+    fs.writeFileSync(path.join(savePath, filename), content);
+
+    res.send(`
+    <h1 style="text-align:center;">Danke für deine Bewerbung!</h1>
+    <p style="text-align:center;">Deine Bewerbungs-ID: <strong>${id}</strong></p>
+    <p style="text-align:center;">Wir haben deine Bewerbung erhalten. Mach dich bereit, eine E-Mail zu bekommen, und trete unserem [Discord-Server](https://discord.gg/Slimecraft) bei.</p>
+    <a href="/" style="display:block;text-align:center;margin-top: 20px;">Zurück zur Bewerbung</a>
+  `);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server läuft auf http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Slimecraft läuft auf http://localhost:${port}`);
 });
