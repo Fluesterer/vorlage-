@@ -1,0 +1,4 @@
+node_modules/
+bewerbungen/
+.env
+*.log
